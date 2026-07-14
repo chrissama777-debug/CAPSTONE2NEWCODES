@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DecisionPhone | Admin Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+</head>
+<body data-page="admin" class="admin-page">
+  <main class="admin-shell">
+    <aside class="admin-sidebar">
+      <div class="admin-brand">
+        <div class="admin-logo"><i class="fa-solid fa-mobile-screen-button"></i></div>
+        <div>
+          <div class="admin-brand-name">DecisionPhone</div>
+          <div class="admin-brand-subtitle">Admin Dashboard</div>
+        </div>
+      </div>
+      <nav class="admin-nav">
+        <a href="#dashboard" class="admin-nav-link active"><i class="fa-solid fa-chart-column"></i> Dashboard</a>
+        <a href="#mobile-management" class="admin-nav-link"><i class="fa-solid fa-mobile-screen"></i> Mobile Management</a>
+        <a href="#brand-management" class="admin-nav-link"><i class="fa-solid fa-copyright"></i> Brand Management</a>
+        <a href="#user-management" class="admin-nav-link"><i class="fa-solid fa-users"></i> User Management</a>
+        <a href="#order-management" class="admin-nav-link"><i class="fa-solid fa-bag-shopping"></i> Order Management</a>
+        <a href="#review-management" class="admin-nav-link"><i class="fa-solid fa-star"></i> Review Management</a>
+        <a href="#reports" class="admin-nav-link"><i class="fa-solid fa-file-chart-column"></i> Reports</a>
+        <a href="#settings" class="admin-nav-link"><i class="fa-solid fa-gear"></i> Settings</a>
+        <a href="#profile" class="admin-nav-link"><i class="fa-solid fa-id-card"></i> Admin Profile</a>
+        <button type="button" class="admin-nav-link logout-link" data-action="logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+      </nav>
+    </aside>
+
+    <section class="admin-content">
+      <header class="admin-header">
+        <div>
+          <div class="admin-eyebrow">Mobile store management</div>
+          <h1 class="admin-title mb-1">E-commerce control center</h1>
+          <div class="admin-breadcrumbs">Dashboard / Operations / Insight</div>
+        </div>
+        <div class="admin-header-actions">
+          <button class="btn btn-outline-primary" type="button" data-action="logout"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Logout</button>
+          <a class="btn btn-primary" href="/index.html"><i class="fa-solid fa-store me-2"></i>Open Storefront</a>
+        </div>
+      </header>
+
+      <section id="dashboard" class="admin-section">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title mb-1">Dashboard</h2>
+            <p class="section-subtitle mb-0">Live operational metrics, sales trends, and recent activity.</p>
+          </div>
+          <div class="d-flex gap-2 flex-wrap">
+            <button class="btn btn-outline-secondary" type="button" data-admin-refresh><i class="fa-solid fa-rotate me-2"></i>Refresh</button>
+            <button class="btn btn-primary" type="button" data-sync-json><i class="fa-solid fa-database me-2"></i>Sync Catalog</button>
+          </div>
+        </div>
+        <div class="stats-grid" id="statsCards"></div>
+        <div class="row g-4 mt-1">
+          <div class="col-xl-7">
+            <div class="panel-card h-100 p-3 p-lg-4">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                  <div class="panel-label">Sales overview</div>
+                  <h3 class="panel-title mb-0">Monthly sales chart</h3>
+                </div>
+                <i class="fa-solid fa-chart-line text-primary fs-4"></i>
+              </div>
+              <div class="chart-wrap"><canvas id="salesChart" height="120"></canvas></div>
+            </div>
+          </div>
+          <div class="col-xl-5">
+            <div class="panel-card h-100 p-3 p-lg-4">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                  <div class="panel-label">Users overview</div>
+                  <h3 class="panel-title mb-0">Monthly user registrations</h3>
+                </div>
+                <i class="fa-solid fa-user-plus text-primary fs-4"></i>
+              </div>
+              <div class="chart-wrap"><canvas id="usersChart" height="120"></canvas></div>
+            </div>
+          </div>
+        </div>
+        <div class="row g-4 mt-1">
+          <div class="col-lg-6">
+            <div class="panel-card h-100 p-3 p-lg-4">
+              <div class="panel-topline"><h3 class="panel-title mb-0">Recent users</h3></div>
+              <div class="list-stack" id="recentUsersList"></div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="panel-card h-100 p-3 p-lg-4">
+              <div class="panel-topline"><h3 class="panel-title mb-0">Recent orders</h3></div>
+              <div class="list-stack" id="recentOrdersList"></div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="panel-card h-100 p-3 p-lg-4">
+              <div class="panel-topline"><h3 class="panel-title mb-0">Low stock mobiles</h3></div>
+              <div class="list-stack" id="lowStockList"></div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="panel-card h-100 p-3 p-lg-4">
+              <div class="panel-topline"><h3 class="panel-title mb-0">Most viewed mobiles</h3></div>
+              <div class="list-stack" id="mostViewedList"></div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="panel-card h-100 p-3 p-lg-4">
+              <div class="panel-topline"><h3 class="panel-title mb-0">Most purchased mobiles</h3></div>
+              <div class="list-stack" id="mostPurchasedList"></div>
+            </div>
+          </div>
+        </div>
+        <div class="panel-card p-3 p-lg-4 mt-4">
+          <div class="panel-topline"><h3 class="panel-title mb-0">Notifications</h3></div>
+          <div class="list-stack" id="notificationsList"></div>
+        </div>
+      </section>
+
+      <section id="mobile-management" class="admin-section">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title mb-1">Mobile Management</h2>
+            <p class="section-subtitle mb-0">Search, filter, sort, and maintain the product catalog.</p>
+          </div>
+          <button class="btn btn-outline-primary" type="button" data-mobile-reset><i class="fa-solid fa-eraser me-2"></i>Reset Filters</button>
+        </div>
+        <div class="panel-card p-3 p-lg-4 mb-4">
+          <div class="row g-3 align-items-end">
+            <div class="col-md-4"><label class="form-label">Search</label><input class="form-control" id="mobileSearch" placeholder="Search mobiles"></div>
+            <div class="col-md-2"><label class="form-label">Brand</label><select class="form-select" id="mobileBrandFilter"></select></div>
+            <div class="col-md-2"><label class="form-label">Price</label><select class="form-select" id="mobilePriceFilter"><option value="all">All prices</option><option value="0-300">Under $300</option><option value="300-600">$300 - $600</option><option value="600-900">$600 - $900</option><option value="900+">$900+</option></select></div>
+            <div class="col-md-2"><label class="form-label">Sort</label><select class="form-select" id="mobileSort"><option value="recent">Newest</option><option value="name">Name A-Z</option><option value="price-asc">Price low-high</option><option value="price-desc">Price high-low</option><option value="stock-asc">Stock low-high</option><option value="views-desc">Most viewed</option><option value="purchases-desc">Most purchased</option></select></div>
+            <div class="col-md-2"><label class="form-label">Per page</label><select class="form-select" id="mobilePerPage"><option value="5">5</option><option value="10">10</option><option value="20">20</option></select></div>
+          </div>
+        </div>
+        <div class="row g-4">
+          <div class="col-xl-5">
+            <div class="panel-card p-3 p-lg-4 h-100">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="panel-title mb-0">Add / Edit Mobile</h3>
+                <button class="btn btn-sm btn-outline-secondary" type="button" data-mobile-cancel>Edit off</button>
+              </div>
+              <form id="mobileForm" class="row g-3">
+                <input type="hidden" name="phone_id">
+                <input type="hidden" name="image_url">
+                <div class="col-12"><label class="form-label">Mobile Name</label><input class="form-control" name="name" required></div>
+                <div class="col-md-6"><label class="form-label">Brand</label><input class="form-control" name="brand" list="brandSuggestions" required></div>
+                <div class="col-md-6"><label class="form-label">Price</label><input class="form-control" type="number" step="0.01" name="price" required></div>
+                <div class="col-md-6"><label class="form-label">Processor</label><input class="form-control" name="processor"></div>
+                <div class="col-md-3"><label class="form-label">RAM</label><input class="form-control" type="number" name="ram" min="1"></div>
+                <div class="col-md-3"><label class="form-label">Storage</label><input class="form-control" type="number" name="storage" min="1"></div>
+                <div class="col-md-4"><label class="form-label">Display</label><input class="form-control" name="display"></div>
+                <div class="col-md-4"><label class="form-label">Camera</label><input class="form-control" type="number" name="camera" min="1"></div>
+                <div class="col-md-4"><label class="form-label">Battery</label><input class="form-control" type="number" name="battery" min="1"></div>
+                <div class="col-md-6"><label class="form-label">Operating System</label><input class="form-control" name="operating_system"></div>
+                <div class="col-md-6"><label class="form-label">Stock Quantity</label><input class="form-control" type="number" name="stock_quantity" min="0"></div>
+                <div class="col-12"><label class="form-label">Description</label><textarea class="form-control" name="description" rows="3"></textarea></div>
+                <div class="col-md-8"><label class="form-label">Image Upload</label><input class="form-control" type="file" id="mobileImageFile" accept="image/*"></div>
+                <div class="col-md-4"><label class="form-label">Featured Status</label><select class="form-select" name="featured"><option value="false">No</option><option value="true">Yes</option></select></div>
+                <div class="col-md-4"><label class="form-label">Status</label><select class="form-select" name="status"><option value="active">Active</option><option value="inactive">Inactive</option></select></div>
+                <div class="col-md-4"><label class="form-label">Performance</label><input class="form-control" type="number" step="0.1" name="performance_score"></div>
+                <div class="col-md-4 d-grid align-self-end"><button class="btn btn-primary" type="submit">Save Mobile</button></div>
+                <div class="col-12"><div class="image-preview" id="mobileImagePreview">No image selected</div></div>
+              </form>
+            </div>
+          </div>
+          <div class="col-xl-7">
+            <div class="panel-card p-3 p-lg-4 h-100">
+              <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                <h3 class="panel-title mb-0">Catalog</h3>
+                <div class="pagination-info" id="mobilePaginationInfo"></div>
+              </div>
+              <div class="table-responsive admin-table-wrap">
+                <table class="table align-middle admin-table mb-0">
+                  <thead>
+                    <tr>
+                      <th>Image</th>
+                      <th>Mobile</th>
+                      <th>Brand</th>
+                      <th>Price</th>
+                      <th>RAM</th>
+                      <th>Storage</th>
+                      <th>Stock</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="mobileTableBody"></tbody>
+                </table>
+              </div>
+              <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap gap-2">
+                <div class="pagination-info">Page navigation</div>
+                <div class="btn-group">
+                  <button class="btn btn-outline-secondary btn-sm" type="button" data-mobile-prev>Prev</button>
+                  <button class="btn btn-outline-secondary btn-sm" type="button" data-mobile-next>Next</button>
+                </div>
+              </div>
+              <datalist id="brandSuggestions"></datalist>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="brand-management" class="admin-section">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title mb-1">Brand Management</h2>
+            <p class="section-subtitle mb-0">Add, update, and maintain brand identities.</p>
+          </div>
+          <button class="btn btn-outline-primary" type="button" data-brand-reset><i class="fa-solid fa-eraser me-2"></i>Reset Filters</button>
+        </div>
+        <div class="panel-card p-3 p-lg-4 mb-4">
+          <div class="row g-3 align-items-end">
+            <div class="col-md-4"><label class="form-label">Search Brands</label><input class="form-control" id="brandSearch" placeholder="Search brands"></div>
+            <div class="col-md-2"><label class="form-label">Per page</label><select class="form-select" id="brandPerPage"><option value="5">5</option><option value="10">10</option><option value="20">20</option></select></div>
+          </div>
+        </div>
+        <div class="row g-4">
+          <div class="col-xl-4">
+            <div class="panel-card p-3 p-lg-4 h-100">
+              <h3 class="panel-title mb-3">Add / Edit Brand</h3>
+              <form id="brandForm" class="row g-3">
+                <input type="hidden" name="brand_id">
+                <input type="hidden" name="logo_url">
+                <div class="col-12"><label class="form-label">Brand Name</label><input class="form-control" name="name" required></div>
+                <div class="col-12"><label class="form-label">Logo Upload</label><input class="form-control" type="file" id="brandLogoFile" accept="image/*"></div>
+                <div class="col-12"><label class="form-label">Description</label><textarea class="form-control" name="description" rows="4"></textarea></div>
+                <div class="col-12 d-grid"><button class="btn btn-primary" type="submit">Save Brand</button></div>
+                <div class="col-12"><div class="image-preview" id="brandLogoPreview">No logo selected</div></div>
+              </form>
+            </div>
+          </div>
+          <div class="col-xl-8">
+            <div class="panel-card p-3 p-lg-4 h-100">
+              <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                <h3 class="panel-title mb-0">Brands</h3>
+                <div class="pagination-info" id="brandPaginationInfo"></div>
+              </div>
+              <div class="table-responsive admin-table-wrap">
+                <table class="table align-middle admin-table mb-0">
+                  <thead><tr><th>Logo</th><th>Name</th><th>Description</th><th>Actions</th></tr></thead>
+                  <tbody id="brandTableBody"></tbody>
+                </table>
+              </div>
+              <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap gap-2">
+                <div></div>
+                <div class="btn-group">
+                  <button class="btn btn-outline-secondary btn-sm" type="button" data-brand-prev>Prev</button>
+                  <button class="btn btn-outline-secondary btn-sm" type="button" data-brand-next>Next</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="user-management" class="admin-section">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title mb-1">User Management</h2>
+            <p class="section-subtitle mb-0">Activate, suspend, or remove user accounts.</p>
+          </div>
+        </div>
+        <div class="panel-card p-3 p-lg-4">
+          <div class="table-responsive admin-table-wrap">
+            <table class="table align-middle admin-table mb-0">
+              <thead><tr><th>Name</th><th>Email</th><th>Registration Date</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="userTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="order-management" class="admin-section">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title mb-1">Order Management</h2>
+            <p class="section-subtitle mb-0">Update payment and delivery flow from one place.</p>
+          </div>
+        </div>
+        <div class="panel-card p-3 p-lg-4">
+          <div class="table-responsive admin-table-wrap">
+            <table class="table align-middle admin-table mb-0">
+              <thead><tr><th>Order ID</th><th>Customer</th><th>Products</th><th>Total Amount</th><th>Order Date</th><th>Payment Status</th><th>Delivery Status</th><th>Actions</th></tr></thead>
+              <tbody id="orderTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="review-management" class="admin-section">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title mb-1">Review Management</h2>
+            <p class="section-subtitle mb-0">Approve, hide, or delete customer reviews.</p>
+          </div>
+        </div>
+        <div class="panel-card p-3 p-lg-4">
+          <div class="table-responsive admin-table-wrap">
+            <table class="table align-middle admin-table mb-0">
+              <thead><tr><th>Review</th><th>User</th><th>Mobile</th><th>Rating</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="reviewTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="reports" class="admin-section">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title mb-1">Reports</h2>
+            <p class="section-subtitle mb-0">Export sales, user, mobile, and order reports.</p>
+          </div>
+        </div>
+        <div class="panel-card p-3 p-lg-4">
+          <div class="row g-3">
+            <div class="col-md-3"><a class="btn btn-primary w-100" href="/admin/reports/export.csv?type=sales"><i class="fa-solid fa-file-csv me-2"></i>Sales CSV</a></div>
+            <div class="col-md-3"><a class="btn btn-outline-primary w-100" href="/admin/reports/export.csv?type=users"><i class="fa-solid fa-file-csv me-2"></i>Users CSV</a></div>
+            <div class="col-md-3"><a class="btn btn-outline-primary w-100" href="/admin/reports/export.csv?type=mobiles"><i class="fa-solid fa-file-csv me-2"></i>Mobiles CSV</a></div>
+            <div class="col-md-3"><a class="btn btn-outline-primary w-100" href="/admin/reports/export.csv?type=orders"><i class="fa-solid fa-file-csv me-2"></i>Orders CSV</a></div>
+          </div>
+          <div class="row g-4 mt-2" id="reportStatsCards"></div>
+        </div>
+      </section>
+
+      <section id="settings" class="admin-section">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title mb-1">Settings</h2>
+            <p class="section-subtitle mb-0">Keep the catalog and dashboard state in sync.</p>
+          </div>
+        </div>
+        <div class="panel-card p-3 p-lg-4">
+          <div class="d-flex flex-wrap gap-3 align-items-center justify-content-between">
+            <div>
+              <h3 class="panel-title mb-1">Catalog sync</h3>
+              <div class="text-muted">Refresh the seeded catalog from JSON and rebuild dashboard data.</div>
+            </div>
+            <div class="d-flex gap-2 flex-wrap">
+              <button class="btn btn-primary" type="button" data-sync-json><i class="fa-solid fa-database me-2"></i>Sync JSON</button>
+              <button class="btn btn-outline-secondary" type="button" data-admin-refresh><i class="fa-solid fa-rotate me-2"></i>Refresh dashboard</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="profile" class="admin-section">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title mb-1">Admin Profile</h2>
+            <p class="section-subtitle mb-0">Update the signed-in administrator account.</p>
+          </div>
+        </div>
+        <div class="panel-card p-3 p-lg-4">
+          <form id="profileForm" class="row g-3">
+            <input type="hidden" name="avatar_url">
+            <div class="col-md-6"><label class="form-label">Name</label><input class="form-control" name="name" required></div>
+            <div class="col-md-6"><label class="form-label">Email</label><input class="form-control" name="email" type="email" required></div>
+            <div class="col-md-8"><label class="form-label">Profile Picture</label><input class="form-control" type="file" id="profilePictureFile" accept="image/*"></div>
+            <div class="col-md-4"><label class="form-label">New Password</label><input class="form-control" name="password" type="password" placeholder="Leave blank to keep current"></div>
+            <div class="col-12"><div class="image-preview" id="profilePicturePreview">No image selected</div></div>
+            <div class="col-12 d-grid d-md-flex justify-content-md-end"><button class="btn btn-primary" type="submit">Save Profile</button></div>
+          </form>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <datalist id="brandSuggestions"></datalist>
+  <div data-toast-stack></div>
+  <div data-loading-overlay></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="module" src="/js/admin.js"></script>
+</body>
+</html>

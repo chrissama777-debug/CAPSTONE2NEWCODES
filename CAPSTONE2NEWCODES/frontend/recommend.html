@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DecisionPhone | Recommend</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <script type="module" src="/js/main.js"></script>
+</head>
+<body data-page="recommend">
+  <div data-app-nav></div>
+  <main class="container py-4 py-lg-5">
+    <div class="page-card p-3 p-lg-4 mb-4">
+      <h1 class="section-title">Recommendation Engine</h1>
+      <p class="text-muted mb-0">Set your preferences and get ranked devices based on weighted scoring.</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <div class="page-card p-3 p-lg-4">
+          <form data-recommend-form class="d-grid gap-3">
+            <div><label class="form-label">Budget</label><input class="form-control" type="number" name="budget" value="800"></div>
+            <div><label class="form-label">Minimum RAM</label><select class="form-select" name="min_ram"><option value="4">4 GB</option><option value="6">6 GB</option><option value="8" selected>8 GB</option><option value="12">12 GB</option></select></div>
+            <div><label class="form-label">Minimum Storage</label><select class="form-select" name="min_storage"><option value="64">64 GB</option><option value="128" selected>128 GB</option><option value="256">256 GB</option></select></div>
+            <div><label class="form-label">Minimum Battery</label><select class="form-select" name="min_battery"><option value="3000">3000 mAh</option><option value="4000">4000 mAh</option><option value="5000" selected>5000 mAh</option></select></div>
+            <div><label class="form-label">Camera Priority: <span data-camera-value>3</span></label><input class="form-range" type="range" min="1" max="5" value="3" name="camera_priority" data-slider="camera"></div>
+            <div><label class="form-label">Performance Priority: <span data-performance-value>3</span></label><input class="form-range" type="range" min="1" max="5" value="3" name="performance_priority" data-slider="performance"></div>
+            <div><label class="form-label">Brand Preference</label><select class="form-select" name="brand_preference"><option value="">Any</option><option>Samsung</option><option>Apple</option><option>Xiaomi</option><option>OnePlus</option><option>Realme</option><option>Oppo</option><option>Vivo</option><option>Google</option></select></div>
+            <button class="btn btn-primary btn-lg">Recommend Phones</button>
+          </form>
+        </div>
+      </div>
+      <div class="col-lg-8">
+        <div class="card-grid" data-recommend-results></div>
+      </div>
+    </div>
+  </main>
+  <div data-app-footer></div>
+  <div data-toast-stack></div>
+  <div data-loading-overlay></div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="module" src="/js/recommend.js"></script>
+</body>
+</html>
